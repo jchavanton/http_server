@@ -102,6 +102,7 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+        version := "0.0.0"
 	if len(os.Args) < 4 {
 		fmt.Printf("Missing argument %d\n", len(os.Args))
 		return
@@ -119,7 +120,7 @@ func main() {
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/download", downloadHandler)
 
-	fmt.Printf("Listen on port %d\n", port)
+	fmt.Printf("version[%s] Listen on port %d\n", version, port)
 	// http.ListenAndServe(":"+os.Args[1], nil)
         e = http.ListenAndServeTLS(":"+os.Args[1], cert, key, nil)
         if e != nil {
