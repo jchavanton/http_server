@@ -1,6 +1,6 @@
 FROM golang:bullseye
 
-ARG VERSION="0.0.0"
+ARG VERSION="0.0.1"
 
 COPY main.go /
 # COPY go.mod /
