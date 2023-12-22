@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"text/template"
+	"strconv"
 )
 
 // Compile templates on start of the application
@@ -31,9 +32,9 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer file.Close()
-	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
-	fmt.Printf("File Size: %+v\n", handler.Size)
-	fmt.Printf("MIME Header: %+v\n", handler.Header)
+	// fmt.Printf("Uploaded File: %+v\n", handler.Filename)
+	// fmt.Printf("File Size: %+v\n", handler.Size)
+	// fmt.Printf("MIME Header: %+v\n", handler.Header)
 
 	// Create file
 	dst, err := os.Create("upload/" + handler.Filename)
@@ -49,7 +50,8 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "Successfully Uploaded File\n")
+	fmt.Printf("Successfully Uploaded File [%s] size[%d]\n", handler.Filename, handler.Size)
+	fmt.Fprintf(w, "Successfully Uploaded File [%s] size[%d]\n", handler.Filename, handler.Size)
 }
 
 func checkFileExists(filePath string) bool {
@@ -100,11 +102,27 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	if len(os.Args) < 4 {
+		fmt.Printf("Missing argument %d\n", len(os.Args))
+		return
+	}
+	port, e := strconv.Atoi(os.Args[1])
+	if e != nil {
+		fmt.Printf("Invalid argument port %s\n", os.Args[1])
+		return
+	}
+	cert := os.Args[2]
+	key := os.Args[3]
+	fmt.Printf("cert[%s] key[%s]\n", cert, key)
+
 	// Upload route
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/download", downloadHandler)
 
-	//Listen on port 8080
-	fmt.Printf("Listen on port 8080\n")
-	http.ListenAndServe(":8080", nil)
+	fmt.Printf("Listen on port %d\n", port)
+	// http.ListenAndServe(":"+os.Args[1], nil)
+        e = http.ListenAndServeTLS(":"+os.Args[1], cert, key, nil)
+        if e != nil {
+           fmt.Printf("ListenAndServeTLS: ", e)
+        }
 }
