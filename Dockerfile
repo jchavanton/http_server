@@ -3,14 +3,11 @@ FROM golang:bullseye
 ARG VERSION="0.0.1"
 
 COPY main.go /
-# COPY go.mod /
-# COPY go.sum /
 
 RUN echo "building media server" \
  	&& cd / && go build main.go
 
 COPY entry.sh /
-
 
 ENTRYPOINT ["/entry.sh"]
 RUN ["chmod", "+x", "/entry.sh"]

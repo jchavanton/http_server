@@ -23,8 +23,16 @@ func uploadFile(w http.ResponseWriter, r *http.Request) {
 	// Maximum upload of 16 MB files
 	r.ParseMultipartForm(16 << 20)
 
+	var fileName string
+	for k, v := range r.MultipartForm.File{
+		fileName = k
+		fmt.Println(k)
+		fmt.Println(v)
+		break
+	}
+
 	// Get handler for filename, size and headers
-	file, handler, err := r.FormFile("mediaFileName")
+	file, handler, err := r.FormFile(fileName)
 	if err != nil {
 		fmt.Println("Error Retrieving the File")
 		fmt.Println(err)
@@ -122,8 +130,8 @@ func main() {
 
 	fmt.Printf("version[%s] Listen on port %d\n", version, port)
 	// http.ListenAndServe(":"+os.Args[1], nil)
-        e = http.ListenAndServeTLS(":"+os.Args[1], cert, key, nil)
-        if e != nil {
-           fmt.Printf("ListenAndServeTLS: ", e)
-        }
+	e = http.ListenAndServeTLS(":"+os.Args[1], cert, key, nil)
+	if e != nil {
+		fmt.Printf("ListenAndServeTLS: ", e)
+	}
 }
