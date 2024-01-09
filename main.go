@@ -110,7 +110,7 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-        version := "0.0.1"
+        version := "0.0.2"
 	if len(os.Args) < 4 {
 		fmt.Printf("Missing argument %d\n", len(os.Args))
 		return

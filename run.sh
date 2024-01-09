@@ -1,7 +1,7 @@
 #!/bin/bash
 DIR_PREFIX=`pwd`
 CONTAINER=media_server
-VERSION="0.0.1"
+VERSION="0.0.2"
 IMAGE=${CONTAINER}:${VERSION}
 docker stop ${CONTAINER}
 docker rm ${CONTAINER}
