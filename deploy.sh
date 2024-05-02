@@ -2,7 +2,8 @@
 
 INSTALL_PREFIX="/opt/halo"
 
-declare -a media_server_instances=("pbx.mango.band" "pbx.dead-orbit.com")
+# declare -a media_server_instances=("hostname1" "hostname2")
+source hosts.sh
 
 deploy_media_server_config() {
 	ROLE="media_server"
