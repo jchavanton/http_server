@@ -19,6 +19,8 @@ func display(w http.ResponseWriter, page string, data interface{}) {
 	templates.ExecuteTemplate(w, page+".html", data)
 }
 
+
+
 func uploadFile(w http.ResponseWriter, r *http.Request) {
 	// Maximum upload of 16 MB files
 	r.ParseMultipartForm(16 << 20)
@@ -67,10 +69,42 @@ func checkFileExists(filePath string) bool {
 	return !errors.Is(error, os.ErrNotExist)
 }
 
+func writeFile(fn string, w http.ResponseWriter, r *http.Request) {
+		f, err := os.Open(fn)
+		if err != nil {
+			fmt.Println("error opening file [",fn,"] :",  err)
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		fh, err := io.ReadAll(f)
+		if err != nil {
+			fmt.Println("error reading file [",fn,"] :", err)
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		_, err = w.Write(fh)
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+}
+
+func softphoneHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("path", r.URL.Path)
+
+	if r.URL.Path == "/softphone" {
+		writeFile("public" + r.URL.Path + "/index.html", w, r)
+	} else {
+		writeFile("public" + r.URL.Path, w, r)
+	}
+
+}
+
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	ua := r.Header.Get("User-Agent")
 	m := "upload"
 	fmt.Printf("[%s] %s...\n", ua, m)
+
 	switch r.Method {
 	case "GET":
 		display(w, "upload", nil)
@@ -123,6 +157,10 @@ func main() {
 	cert := os.Args[2]
 	key := os.Args[3]
 	fmt.Printf("cert[%s] key[%s]\n", cert, key)
+
+	// softphone
+	http.HandleFunc("/softphone", softphoneHandler)
+	http.HandleFunc("/softphone/main.js", softphoneHandler)
 
 	// Upload route
 	http.HandleFunc("/upload", uploadHandler)
