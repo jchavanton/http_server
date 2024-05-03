@@ -16,6 +16,7 @@ deploy_media_server_config() {
 		        && sudo chmod -R 777 $INSTALL_DIR"
 		scp * $i:$INSTALL_DIR
 		scp ./public/* $i:$INSTALL_DIR/public
+		scp ./public/softphone/* $i:$INSTALL_DIR/public/softphone
 		ssh $i "sudo chown -R root.root $INSTALL_DIR"
 		done
 }
