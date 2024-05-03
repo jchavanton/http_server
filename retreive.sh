@@ -13,7 +13,7 @@ retreive_media_server_config() {
 		printf "\ndownloading from [$i]\n"
 		scp $i:$INSTALL_DIR/* .
 		scp $i:$INSTALL_DIR/public/* public/
-		scp $i:$INSTALL_DIR/public/sofphone/* public/softphone
+		scp $i:$INSTALL_DIR/public/softphone/* public/softphone
 		done
 }
 
