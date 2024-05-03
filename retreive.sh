@@ -12,6 +12,8 @@ retreive_media_server_config() {
 		if [ "$1" != "all" ] && [ "$1" != "$i" ] ; then continue; fi
 		printf "\ndownloading from [$i]\n"
 		scp $i:$INSTALL_DIR/* .
+		scp $i:$INSTALL_DIR/public/* public/
+		scp $i:$INSTALL_DIR/public/sofphone/* public/softphone
 		done
 }
 
